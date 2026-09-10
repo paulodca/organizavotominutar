@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instalador de Atalho PJe - Minutar Voto (9ª Turma)</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --accent-bg: #ecfdf5;
+      --warn-bg: #fffbeb;
+      --warn-text: #92400e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container { max-width: 680px; width: 100%; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .button-zone {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .bookmarklet-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #ffffff !important;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: grab;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.25);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .bookmarklet-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(30, 64, 175, 0.35);
+    }
+    .bookmarklet-btn:active { cursor: grabbing; }
+    .drag-hint { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+    .alert-box {
+      background: var(--warn-bg);
+      border-left: 4px solid #f59e0b;
+      padding: 14px 16px;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: var(--warn-text);
+    }
+    .alert-box strong { display: block; margin-bottom: 4px; color: #78350f; font-size: 14px; }
+    h2 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; color: var(--text); }
+    ol, ul { padding-left: 20px; font-size: 14px; color: var(--text); }
+    li { margin-bottom: 8px; }
+    .actions-list {
+      background: var(--accent-bg);
+      border: 1px solid #d1fae5;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #065f46;
+    }
+    .actions-list ul { padding-left: 18px; }
+    .actions-list li { margin-bottom: 4px; }
+    .copy-box { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .copy-box summary { font-size: 12px; color: var(--text-muted); cursor: pointer; font-weight: 600; }
+    .code-snippet {
+      margin-top: 10px;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11px;
+      word-break: break-all;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>PJe &mdash; Automação do Editor de Voto</h1>
+      <p class="subtitle">Configuração dos títulos padrão e modelo de fundamentação para a 9ª Turma.</p>
+
+      <div class="button-zone">
+        <a class="bookmarklet-btn" href="javascript:(function(){var frame=document.getElementById('editorEstruturadoFrame');if(!frame){alert('Abra a tela de minutar voto no PJe antes de acionar o atalho.');return;}var doc=frame.contentDocument||frame.contentWindow.document;var win=frame.contentWindow;function listaTitulos(){return Array.prototype.slice.call(doc.querySelectorAll('div[id$=&quot;_titulo&quot;]'));}function acharTopico(nome,distinguirCaixa){return listaTitulos().filter(function(t){var txt=(t.textContent||'').trim();return distinguirCaixa?txt===nome:txt.toUpperCase()===nome.toUpperCase();})[0]||null;}function idDoTitulo(t){return t.id.replace('id_','').replace('_titulo','');}function tituloVisivel(id){var a=doc.getElementById('id_'+id+'_atributos');if(!a)return null;var img=a.querySelector('img');return img?img.getAttribute('src').indexOf('visualizar_on')!==-1:null;}function definirTitulo(id,ligar){var v=tituloVisivel(id);if(v===null||v===ligar)return false;win.Editor.editorView.controleExibicaoTitulo(id);return true;}var REGRAS=[{nome:'RELATÓRIO',caixa:false,visivel:false},{nome:'FUNDAMENTAÇÃO',caixa:false,visivel:false},{nome:'MÉRITO',caixa:false,visivel:false},{nome:'RECURSO DA PARTE',caixa:false,visivel:false},{nome:'ITEM DE RECURSO',caixa:false,visivel:false},{nome:'ACÓRDÃO',caixa:true,visivel:false},{nome:'Acórdão',caixa:true,visivel:true}];var alterados=0;REGRAS.forEach(function(r){var el=acharTopico(r.nome,r.caixa);if(el&&definirTitulo(idDoTitulo(el),r.visivel)){alterados++;}});var textoInserido=false;var elFund=acharTopico('FUNDAMENTAÇÃO',false);if(elFund){var idFund=idDoTitulo(elFund);var tm=win.tinymce||window.tinymce||(window.parent&&window.parent.tinymce);var ed=null;if(tm){ed=tm.get('id_'+idFund+'_conteudo');if(!ed&&tm.editors){for(var i=0;i<tm.editors.length;i++){if(tm.editors[i].id==='id_'+idFund+'_conteudo'||tm.editors[i].id.indexOf(idFund)!==-1){ed=tm.editors[i];break;}}}}if(ed){var htmlInserir='<p>INSERIR TEXTO AQUI</p>';ed.setContent(htmlInserir);if(ed.getBody()){ed.getBody().innerHTML=htmlInserir;}if(ed.targetElm){if(ed.targetElm.tagName==='TEXTAREA'){ed.targetElm.value=htmlInserir;}else{ed.targetElm.innerHTML=htmlInserir;}}if(ed.save)ed.save();if(ed.fire){ed.fire('change');ed.fire('input');ed.fire('NodeChange');}if(ed.nodeChanged)ed.nodeChanged();ed.isNotDirty=false;textoInserido=true;}}var toast=document.createElement('div');toast.style.cssText='position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:12px 20px;border-radius:8px;font-family:Segoe UI,sans-serif;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:999999;border-left:4px solid #10b981;transition:opacity .3s;line-height:1.4;';var msg='✓ Títulos da 9ª Turma configurados! '+(alterados>0?'('+alterados+' ajustados)':'(já no padrão)');if(textoInserido){msg+='<br><span style=&quot;font-weight:normal;opacity:0.9&quot;>✓ Texto inserido na Fundamentação.</span>';}else{msg+='<br><span style=&quot;font-weight:normal;color:#fca5a5&quot;>⚠ Bloco Fundamentação não localizado no TinyMCE.</span>';}toast.innerHTML=msg;document.body.appendChild(toast);setTimeout(function(){toast.style.opacity='0';setTimeout(function(){toast.remove();},300);},3500);})();">
+          ★ PJe - Padrão 9ª Turma
+        </a>
+        <div class="drag-hint">&uarr; Clique e arraste o botão acima para a sua barra de favoritos</div>
+      </div>
+
+      <div class="alert-box">
+        <strong>Atenção: momento correto de acionar no PJe</strong>
+        Este atalho foi feito para a tela de <strong>Minutar Voto</strong>.<br>
+        Ele deve ser executado somente <strong>após</strong> selecionar o <em>Tipo do Documento (Acórdão)</em>, escolher o <strong>Magistrado</strong>, a <em>Estrutura do Documento</em> e clicar no botão <strong>&quot;Gerar Documentos&quot;</strong>.<br>
+        Assim que o editor estruturado carregar abaixo com os blocos de texto, clique no favorito na barra do navegador.
+      </div>
+
+      <h2>Como instalar</h2>
+      <ol>
+        <li>Certifique-se de que a barra de favoritos do navegador esteja visível (<code>Ctrl + Shift + B</code> no Windows ou <code>Cmd + Shift + B</code> no Mac).</li>
+        <li>Arraste o botão azul <strong>★ PJe - Padrão 9ª Turma</strong> diretamente até a sua barra de favoritos.</li>
+      </ol>
+
+      <h2>Ações realizadas automaticamente</h2>
+      <div class="actions-list">
+        <ul>
+          <li><strong>Oculta do documento:</strong> Relatório, Fundamentação, Mérito, Recurso da Parte, Item de Recurso e ACÓRDÃO (rótulo em maiúsculo).</li>
+          <li><strong>Mantém visível:</strong> Acórdão (título impresso).</li>
+          <li><strong>Preenche a Fundamentação:</strong> Injeta o texto <code>INSERIR TEXTO AQUI</code> no editor.</li>
+          <li><strong>Feedback:</strong> Exibe aviso discreto no canto inferior direito informando a quantidade de títulos ajustados e a inserção do texto.</li>
+        </ul>
+      </div>
+
+      <details class="copy-box">
+        <summary>Instalação manual (copiar código JavaScript)</summary>
+        <div class="code-snippet">javascript:(function(){var frame=document.getElementById('editorEstruturadoFrame');if(!frame){alert('Abra a tela de minutar voto no PJe antes de acionar o atalho.');return;}var doc=frame.contentDocument||frame.contentWindow.document;var win=frame.contentWindow;function listaTitulos(){return Array.prototype.slice.call(doc.querySelectorAll('div[id$="_titulo"]'));}function acharTopico(nome,distinguirCaixa){return listaTitulos().filter(function(t){var txt=(t.textContent||'').trim();return distinguirCaixa?txt===nome:txt.toUpperCase()===nome.toUpperCase();})[0]||null;}function idDoTitulo(t){return t.id.replace('id_','').replace('_titulo','');}function tituloVisivel(id){var a=doc.getElementById('id_'+id+'_atributos');if(!a)return null;var img=a.querySelector('img');return img?img.getAttribute('src').indexOf('visualizar_on')!==-1:null;}function definirTitulo(id,ligar){var v=tituloVisivel(id);if(v===null||v===ligar)return false;win.Editor.editorView.controleExibicaoTitulo(id);return true;}var REGRAS=[{nome:'RELATÓRIO',caixa:false,visivel:false},{nome:'FUNDAMENTAÇÃO',caixa:false,visivel:false},{nome:'MÉRITO',caixa:false,visivel:false},{nome:'RECURSO DA PARTE',caixa:false,visivel:false},{nome:'ITEM DE RECURSO',caixa:false,visivel:false},{nome:'ACÓRDÃO',caixa:true,visivel:false},{nome:'Acórdão',caixa:true,visivel:true}];var alterados=0;REGRAS.forEach(function(r){var el=acharTopico(r.nome,r.caixa);if(el&&definirTitulo(idDoTitulo(el),r.visivel)){alterados++;}});var textoInserido=false;var elFund=acharTopico('FUNDAMENTAÇÃO',false);if(elFund){var idFund=idDoTitulo(elFund);var tm=win.tinymce||window.tinymce||(window.parent&&window.parent.tinymce);var ed=null;if(tm){ed=tm.get('id_'+idFund+'_conteudo');if(!ed&&tm.editors){for(var i=0;i<tm.editors.length;i++){if(tm.editors[i].id==='id_'+idFund+'_conteudo'||tm.editors[i].id.indexOf(idFund)!==-1){ed=tm.editors[i];break;}}}}if(ed){var htmlInserir='<p>INSERIR TEXTO AQUI</p>';ed.setContent(htmlInserir);if(ed.getBody()){ed.getBody().innerHTML=htmlInserir;}if(ed.targetElm){if(ed.targetElm.tagName==='TEXTAREA'){ed.targetElm.value=htmlInserir;}else{ed.targetElm.innerHTML=htmlInserir;}}if(ed.save)ed.save();if(ed.fire){ed.fire('change');ed.fire('input');ed.fire('NodeChange');}if(ed.nodeChanged)ed.nodeChanged();ed.isNotDirty=false;textoInserido=true;}}var toast=document.createElement('div');toast.style.cssText='position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:12px 20px;border-radius:8px;font-family:Segoe UI,sans-serif;font-size:13px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:999999;border-left:4px solid #10b981;transition:opacity .3s;line-height:1.4;';var msg='✓ Títulos da 9ª Turma configurados! '+(alterados>0?'('+alterados+' ajustados)':'(já no padrão)');if(textoInserido){msg+='<br><span style="font-weight:normal;opacity:0.9">✓ Texto inserido na Fundamentação.</span>';}else{msg+='<br><span style="font-weight:normal;color:#fca5a5">⚠ Bloco Fundamentação não localizado no TinyMCE.</span>';}toast.innerHTML=msg;document.body.appendChild(toast);setTimeout(function(){toast.style.opacity='0';setTimeout(function(){toast.remove();},300);},3500);})();</div>
+      </details>
+    </div>
+  </div>
+</body>
+</html>
